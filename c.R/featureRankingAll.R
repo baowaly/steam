@@ -23,8 +23,8 @@ freeCores = max(1, detectCores(logical = FALSE) - 1)
 registerDoMC(freeCores)
 
 #Set path
-#path = "/home/baowaly/steam/"
-path = "/home/yipeitu/steam_helpful_review_20160701/"
+path = "/home/baowaly/steam/"
+#path = "/home/yipeitu/steam_helpful_review_20160701/"
 setwd(path)
 
 #######Select Some Parameters#########

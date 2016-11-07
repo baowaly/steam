@@ -11,10 +11,10 @@ setwd("~/steam/")
 genre <- "All"
 score.num <- 0.8
 vote.num <- 50
-n.dim <- 110
+n.dim <- 300
 
 #combine files
-file1 <- paste0("Evaluation/ES_All_V50_R0.8_F500_S20.Rdata")
+file1 <- paste0("Evaluation/ES_All_V50_R0.8_F300_S20.Rdata")
 file1.data <- get(load(file1))
 combine.data <- cbind(sample=as.integer(file1.data$sample.size/1000), file1.data)
 
@@ -39,24 +39,24 @@ dataset$Classifier <- as.factor(dataset$Classifier)
 meanSampleAccuracy <- aggregate(cbind(train.f1score, test.f1score)~sample+Classifier, data=dataset, FUN = mean)
 
 #plot training accuracy comparison
-accuracyPlotBySample <- ggplot(data=meanSampleAccuracy, aes(x=as.numeric(as.character(sample)), y=train.f1score, group=Classifier, colour=Classifier)) +
+TrainAccuracyPlotBySample <- ggplot(data=meanSampleAccuracy, aes(x=as.numeric(as.character(sample)), y=train.f1score, group=Classifier, colour=Classifier)) +
   geom_line(aes(linetype=Classifier), size=0.5) +
   geom_point(aes(shape=Classifier), size=1) +
   ggtitle(paste0("Comparison of Learning Models of ",genre," Reviews\nRating Score: ",score.num, " Vote: ", vote.num)) +     # Set title
   scale_x_continuous(breaks=c(1,5,10,15,20)) +
   xlab("Sample Size") + ylab("Training FScore") + # Set axis labels
   theme(legend.position="top", plot.title = element_text(size = 10))
-print(accuracyPlotBySample)
+print(TrainAccuracyPlotBySample)
 
 #plot test accuracy comparison
-  accuracyPlotBySample <- ggplot(data=meanSampleAccuracy, aes(x=as.numeric(as.character(sample)), y=test.f1score, group=Classifier, colour=Classifier)) +
+  TestAccuracyPlotBySample <- ggplot(data=meanSampleAccuracy, aes(x=as.numeric(as.character(sample)), y=test.f1score, group=Classifier, colour=Classifier)) +
     geom_line(aes(linetype=Classifier), size=0.5) +
     geom_point(aes(shape=Classifier), size=1) +
     ggtitle(paste0("Comparison of Learning Models of ",genre," Reviews\nRating Score: ",score.num, " Vote: ", vote.num)) +     # Set title
     scale_x_continuous(breaks=c(1,5,10,15,20)) +
     xlab("Sample Size") + ylab("Test FScore") + # Set axis labels
     theme(legend.position="top", plot.title = element_text(size = 10))
-  #print(accuracyPlotBySample)
+  print(TestAccuracyPlotBySample)
   
 #Model Learning Curve
   #method <-"GBM"

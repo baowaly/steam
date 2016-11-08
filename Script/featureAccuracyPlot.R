@@ -9,26 +9,26 @@ library(data.table)
 setwd("~/steam/")
 
 genre <- "All"
-score.num <- 0.9
+score.num <- 0.90
 sample.size <- 5
 n.dim <- 700
 
 #combine files
-#file1 <- paste0("Evaluation/ES_All_V50_R0.9_F400_S5.Rdata")
-#file1.data <- get(load(file1))
-#file1.data <- cbind(sample=sample.size, file1.data)
+file1 <- paste0("Evaluation/ES_All_V50_R", score.num, "_F500_S5.Rdata")
+file1.data <- get(load(file1))
+file1.data <- cbind(sample=sample.size, file1.data)
 
-#file2 <- paste0("Evaluation/ES_All_V50_R0.9_F700_S5.Rdata")
-#file2.data <- get(load(file2))
-#file2.data <- cbind(sample=sample.size, file2.data)
-#combine.data <- rbind(file1.data, file2.data)
+file2 <- paste0("Evaluation/ES_All_V50_R", score.num,"_F700_S5.Rdata")
+file2.data <- get(load(file2))
+file2.data <- cbind(sample=sample.size, file2.data)
+combine.data <- rbind(file1.data, file2.data)
 
-#comFile <- paste0("Evaluation/Com_", genre, "_R", score.num, "_F", n.dim, ".Rdata")
-#save(combine.data, file=comFile)
+comFile <- paste0("Evaluation/Com_", genre, "_R", score.num, "_F", n.dim, ".Rdata")
+save(combine.data, file=comFile)
 
 
 # load the meanAccuracy.csv file from the local directory
-load("Evaluation/Com_All_R0.9_F700.Rdata")
+#load("Evaluation/Com_All_R0.9_F700.Rdata")
 dataset <- combine.data
 
 #group by
@@ -38,10 +38,10 @@ meanFeatureScore <- aggregate(cbind(test.auc, test.f1score)~features+method, dat
 
 #get max test.f1score
 GBMSCORE <- subset(meanFeatureScore, method == "GBM")
-GBMSCORE[which.max(GBMSCORE$test.f1score),]
+head(GBMSCORE[order(-GBMSCORE$test.auc),],5)
 
 SVMSCORE <- subset(meanFeatureScore, method == "SVM")
-SVMSCORE[which.max(SVMSCORE$test.f1score),]
+head(SVMSCORE[order(-SVMSCORE$test.auc),],10)
 
 
   # Plot 

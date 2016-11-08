@@ -42,7 +42,7 @@ meanSampleAccuracy <- aggregate(cbind(train.f1score, test.f1score)~sample+Classi
 TrainAccuracyPlotBySample <- ggplot(data=meanSampleAccuracy, aes(x=as.numeric(as.character(sample)), y=train.f1score, group=Classifier, colour=Classifier)) +
   geom_line(aes(linetype=Classifier), size=0.5) +
   geom_point(aes(shape=Classifier), size=1) +
-  ggtitle(paste0("Comparison of Learning Models of ",genre," Reviews\nRating Score: ",score.num, " Vote: ", vote.num)) +     # Set title
+  ggtitle(paste0("Comparison of Learning Models of ",genre," Reviews\nRating Score: ",score.num, " Vote: ", vote.num, " Features: ", n.dim)) +     # Set title
   scale_x_continuous(breaks=c(1,5,10,15,20)) +
   xlab("Sample Size") + ylab("Training FScore") + # Set axis labels
   theme(legend.position="top", plot.title = element_text(size = 10))
@@ -52,15 +52,15 @@ print(TrainAccuracyPlotBySample)
   TestAccuracyPlotBySample <- ggplot(data=meanSampleAccuracy, aes(x=as.numeric(as.character(sample)), y=test.f1score, group=Classifier, colour=Classifier)) +
     geom_line(aes(linetype=Classifier), size=0.5) +
     geom_point(aes(shape=Classifier), size=1) +
-    ggtitle(paste0("Comparison of Learning Models of ",genre," Reviews\nRating Score: ",score.num, " Vote: ", vote.num)) +     # Set title
+    ggtitle(paste0("Comparison of Learning Models of ",genre," Reviews\nRating Score: ",score.num, " Vote: ", vote.num, " Features: ", n.dim)) +     # Set title
     scale_x_continuous(breaks=c(1,5,10,15,20)) +
     xlab("Sample Size") + ylab("Test FScore") + # Set axis labels
     theme(legend.position="top", plot.title = element_text(size = 10))
   print(TestAccuracyPlotBySample)
   
 #Model Learning Curve
-  #method <-"GBM"
-  method <-"SVM" 
+  method <-"GBM"
+  #method <-"SVM" 
   train.score <- cbind(meanSampleAccuracy[meanSampleAccuracy$Classifier == method, c("sample", "train.f1score"), ], Type="Training score")
   setnames(train.score, "train.f1score", "fscore")
   test.score <- cbind(meanSampleAccuracy[meanSampleAccuracy$Classifier == method, c("sample", "test.f1score"), ], Type="Test score")
@@ -70,7 +70,7 @@ print(TrainAccuracyPlotBySample)
   accuracyPlotByMethod <- ggplot(data, aes(x=as.numeric(as.character(sample)), y=fscore, group=Type, colour=Type)) +
     geom_line(aes(linetype=Type), size=0.5) +
     geom_point(aes(shape=Type), size=1) +
-    ggtitle(paste0(method, " Learning Curve of ",genre," Reviews\nRating Score: ",score.num, " Vote: ", vote.num)) +     # Set title
+    ggtitle(paste0(method, " Learning Curve of ",genre," Reviews\nRating Score: ",score.num, " Vote: ", vote.num, " Features: ", n.dim)) +     # Set title
     scale_x_continuous(breaks=c(1,5,10,15,20)) +
     xlab("Sample Size") + ylab("F Score") + # Set axis labels
     scale_linetype_manual(values = c("solid", "solid")) +

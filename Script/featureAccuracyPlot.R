@@ -1,5 +1,7 @@
 start.time <- Sys.time()
 
+#install.packages(new.packages, repos="http://cran.rstudio.com/")
+
 library(ggplot2)
 library(reshape2)
 library(data.table)
@@ -14,6 +16,7 @@ sample.size <- 5
 n.dim <- 700
 
 #combine files
+
 #file1 <- paste0("Evaluation/1.ES_All_V50_R", score.num, "_F700_S5.Rdata")
 #file1.data <- get(load(file1))
 #file1.data <- cbind(sample=sample.size, file1.data)
@@ -26,10 +29,8 @@ n.dim <- 700
 #comFile <- paste0("Evaluation/Com_", genre, "_R", score.num, "_F", n.dim, ".Rdata")
 #save(combine.data, file=comFile)
 
-
 # load the meanAccuracy.csv file from the local directory
-load("Evaluation/GBM_Adventure_V50_R0.85_S25.Rdata")
-dataset <- comb.score
+dataset <- get(load("Evaluation/GBM_Zombies_V50_R0.85_S25.Rdata"))
 
 #group by
 dataset$features <- as.factor(dataset$features)
@@ -38,11 +39,7 @@ meanFeatureScore <- aggregate(cbind(test.auc, test.f1score)~features, data=datas
 
 #get max test.f1score
 head(meanFeatureScore[order(-meanFeatureScore$test.auc),],5)
-
 head(meanFeatureScore[order(-meanFeatureScore$test.f1score),],5)
-
-#SVMSCORE <- subset(meanFeatureScore, method == "SVM")
-#head(SVMSCORE[order(-SVMSCORE$test.auc),],10)
 
 
   # Plot 

@@ -10,11 +10,13 @@ genres <- c("All",
             "Simulation",
             "Adventure",
             "FPS",
-            "Zombies",
             "Horror",
-            "Racing")
+            "Racing",
+            "Casual"
+          )
 
-scores <- c(0.8, 0.85, 0.90, 0.95)
+
+scores <- c(0.05, 0.10, 0.8, 0.85, 0.90, 0.95)
 vote <- 50
 method <- "GBM"
 
@@ -29,7 +31,7 @@ for(genre in genres){
     else
       sample.size <- "100"
     
-    sourceFile <- paste0("Result/", method, "_", genre ,"_V", vote ,"_R", score, "_S", sample.size,".Rdata")
+    sourceFile <- paste0("finalResult/", method, "_", genre ,"_V", vote ,"_R", score, "_S", sample.size,".Rdata")
     
     if(!file.exists(sourceFile)) next
     load(sourceFile)
@@ -43,8 +45,8 @@ for(genre in genres){
 
 }
 
-outputFile <- paste0("Result/finalResult.Rdata")
-outputCSV <- paste0("Result/finalResult.csv")
+outputFile <- paste0("finalResult/finalResult.Rdata")
+outputCSV <- paste0("finalResult/finalResult.csv")
 if(!file.exists(outputFile)){
   file.create(outputFile)  
 } 

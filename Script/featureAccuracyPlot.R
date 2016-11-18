@@ -30,7 +30,7 @@ n.dim <- 700
 #save(combine.data, file=comFile)
 
 # load the meanAccuracy.csv file from the local directory
-dataset <- get(load("Evaluation/GBM_Zombies_V50_R0.85_S25.Rdata"))
+dataset <- get(load("Evaluation/GBM_Casual_V50_R0.95_S50.Rdata"))
 
 #group by
 dataset$features <- as.factor(dataset$features)
@@ -40,7 +40,6 @@ meanFeatureScore <- aggregate(cbind(test.auc, test.f1score)~features, data=datas
 #get max test.f1score
 head(meanFeatureScore[order(-meanFeatureScore$test.auc),],5)
 head(meanFeatureScore[order(-meanFeatureScore$test.f1score),],5)
-
 
   # Plot 
   accuracyPlot <- ggplot(data=meanFeatureScore, aes(x=as.numeric(as.character(features)), y=test.f1score, group=method, colour=method)) +

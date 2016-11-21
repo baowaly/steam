@@ -16,7 +16,12 @@ genres <- c("All",
           )
 
 
-scores <- c(0.05, 0.10, 0.8, 0.85, 0.90, 0.95)
+scores <- c(0.8, 0.85, 0.90, 0.95)
+resultType <- "helpful"
+
+#scores <- c(0.05, 0.10)
+#resultType <- "worst"
+
 vote <- 50
 method <- "GBM"
 
@@ -45,8 +50,8 @@ for(genre in genres){
 
 }
 
-outputFile <- paste0("finalResult/finalResult.Rdata")
-outputCSV <- paste0("finalResult/finalResult.csv")
+outputFile <-paste0("finalResult/result_", resultType, ".Rdata")
+outputCSV <- paste0("finalResult/result_", resultType, ".csv")
 if(!file.exists(outputFile)){
   file.create(outputFile)  
 } 

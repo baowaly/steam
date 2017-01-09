@@ -6,32 +6,26 @@ library(reshape2)
 setwd("~/steam/")
 
 genre <- "All"
-score.num <- 0.8
-sample.seq <- c(1, 10, 15, 20)
-vote.seq <- c(50)
-n.dim <- 500
+scores <- c(0.05, 0.10, 0.80, 0.85, 0.90, 0.95)
 
 # if the combined dataset doesn't exist, create it
-comFile <- paste0("Evaluation/Com_", genre, "_R", score.num, "_F", n.dim, ".Rdata")
-
+comFile <- paste0("WSF/WSF_GBM_", genre, "_V50.Rdata")
 if(!file.exists(comFile)){
   file.create(comFile)  
 } 
-combine.data <- NULL
-for(sample.size in sample.seq){
-  for(vote.num in vote.seq){
-    # if the merged dataset does exist, append to it
-    file <- paste0("Evaluation/ES_", genre, "_V", vote.num, "_R", score.num,"_F", n.dim, "_S", sample.size, ".Rdata")
-    if(!file.exists(file)) next
+combine.wsf <- NULL
+for(score in scores){
+  # if the merged dataset does exist, append to it
+  file <- paste0("WSF/WSF_GBM_", genre,"_V50_R", score,".Rdata")
+  if(!file.exists(file)) next
 
-    file.data <- get(load(file))
-    file.data <- cbind(sample=sample.size, file.data)
-    combine.data <- rbind(combine.data, file.data)
+  file.data <- get(load(file))
+  combine.wsf <- rbind(combine.wsf, file.data)
 
-  }
-  
 }
-save(combine.data, file=comFile)
+
+#save file
+save(combine.wsf, file=comFile)
 cat("\nSaved file in: ", comFile, "\n")
 
 

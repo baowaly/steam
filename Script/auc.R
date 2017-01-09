@@ -9,6 +9,8 @@ library(gbm)				  # GBM Models
 library(pROC)				  # plot the ROC curve
 library(xgboost)      # Extreme Gradient Boosting
 
+library(ROCR)
+
 
 ### Get the Data
 # Load the data and construct indices to divied it into training and test data sets.
@@ -82,3 +84,20 @@ plot(gbm.ROC,main="GBM ROC")
 
 # Plot the propability of poor segmentation
 histogram(~gbm.probs$PS|testData$Class,xlab="Probability of Poor Segmentation")
+
+###ROC#############
+pred <- prediction(gbm.pred, testData$Class);
+
+# Recall-Precision curve             
+RP.perf <- performance(pred, "prec", "rec");
+
+plot (RP.perf);
+
+# ROC curve
+ROC.perf <- performance(pred, "tpr", "fpr");
+plot (ROC.perf);
+
+# ROC area under the curve
+auc.tmp <- performance(pred,"auc");
+auc <- as.numeric(auc.tmp@y.values)
+

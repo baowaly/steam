@@ -14,9 +14,9 @@ vote.num <- 50
 n.dim <- 300
 
 #combine files
-file1 <- paste0("Evaluation/ES_All_V50_R0.8_F300_S20.Rdata")
-file1.data <- get(load(file1))
-combine.data <- cbind(sample=as.integer(file1.data$sample.size/1000), file1.data)
+#file1 <- paste0("Evaluation/ES_All_V50_R0.8_F300_S20.Rdata")
+#file1.data <- get(load(file1))
+#combine.data <- cbind(sample=as.integer(file1.data$sample.size/1000), file1.data)
 
 #file2 <- paste0("Evaluation/ES_All_V50_R0.9_F700_S5.Rdata")
 #file2.data <- get(load(file2))
@@ -27,16 +27,14 @@ combine.data <- cbind(sample=as.integer(file1.data$sample.size/1000), file1.data
 #save(combine.data, file=comFile)
 
 # load the meanAccuracy.csv file from the local directory
-#comFile <- paste0("Evaluation/Com_", genre, "_R", score.num, "_F", n.dim, ".Rdata")
-#load(comFile)
+comFile <- paste0("RG_GBM_All_V50_S5.Rdata")
+load(comFile)
 
-dataset <- combine.data
-setnames(dataset, "method", "Classifier")
+dataset <- comb.score
 
 #group by
 dataset$sample <- as.factor(dataset$sample)
-dataset$Classifier <- as.factor(dataset$Classifier)
-meanSampleAccuracy <- aggregate(cbind(train.f1score, test.f1score)~sample+Classifier, data=dataset, FUN = mean)
+meanSampleAccuracy <- aggregate(cbind(test.rmse, test.cor)~sample, data=dataset, FUN = mean)
 
 #plot training accuracy comparison
 TrainAccuracyPlotBySample <- ggplot(data=meanSampleAccuracy, aes(x=as.numeric(as.character(sample)), y=train.f1score, group=Classifier, colour=Classifier)) +

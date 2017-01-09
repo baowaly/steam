@@ -11,47 +11,32 @@ library(data.table)
 setwd("~/steam/")
 
 genre <- "All"
-score.num <- 0.85
-sample.size <- 5
-n.dim <- 700
 
-#combine files
+datafile <- paste0("WSF/WSF_GBM_", genre, "_V50.Rdata")
+dataset <- get(load(datafile))
 
-#file1 <- paste0("Evaluation/1.ES_All_V50_R", score.num, "_F700_S5.Rdata")
-#file1.data <- get(load(file1))
-#file1.data <- cbind(sample=sample.size, file1.data)
-
-#file2 <- paste0("Evaluation/2.ES_All_V50_R", score.num,"_F700_S5.Rdata")
-#file2.data <- get(load(file2))
-#file2.data <- cbind(sample=sample.size, file2.data)
-#combine.data <- rbind(file1.data, file2.data)
-
-#comFile <- paste0("Evaluation/Com_", genre, "_R", score.num, "_F", n.dim, ".Rdata")
-#save(combine.data, file=comFile)
-
-# load the meanAccuracy.csv file from the local directory
-dataset <- get(load("Evaluation/GBM_Casual_V50_R0.95_S50.Rdata"))
 
 #group by
 dataset$features <- as.factor(dataset$features)
-#dataset$method <- as.factor(dataset$method)
-meanFeatureScore <- aggregate(cbind(test.auc, test.f1score)~features, data=dataset, FUN = mean)
-
-#get max test.f1score
-head(meanFeatureScore[order(-meanFeatureScore$test.auc),],5)
-head(meanFeatureScore[order(-meanFeatureScore$test.f1score),],5)
+dataset$Threshold <- as.factor(dataset$ws.score)
+meanFeatureScore <- aggregate(cbind(test.auc, test.f1score)~features+Threshold, data=dataset, FUN = mean)
 
   # Plot 
-  accuracyPlot <- ggplot(data=meanFeatureScore, aes(x=as.numeric(as.character(features)), y=test.f1score, group=method, colour=method)) +
-    geom_line(aes(linetype=method), size=0.5) +
-    geom_point(aes(shape=method), size=1) +
-    ggtitle(paste0("Model FScore of ",genre," Reviews\nScore: ",score.num, " Sample Size: ", sample.size)) +     # Set title
-    scale_x_continuous(breaks=c(0, seq(50,700,50))) +
-    xlab("No. of Features") + ylab("FScore") + # Set axis labels
-    theme(legend.position="top", plot.title = element_text(size = 10))
+  accuracyPlot <- ggplot(data=meanFeatureScore, aes(x=as.numeric(as.character(features)), y=test.f1score, group=Threshold, colour=Threshold)) +
+    geom_line(aes(linetype=Threshold), size=0.5) +
+    geom_point(aes(shape=Threshold), size=1.5) +
+    #ggtitle(paste0("F Score of ", genre ," genre")) +     # Set title
+    scale_x_continuous(breaks=c(seq(100,700,100))) +
+    xlab("# Features") + ylab("F-score") + # Set axis labels
+    #theme(legend.position="right", plot.title = element_text(size = 10))
+    scale_colour_manual(values = c("black","black", "blue", "red", "blue", "red")) +
+    scale_linetype_manual(values = c("solid", "dotted", "solid", "dotted", "solid", "dotted")) +
+    theme_bw()+
+    theme(panel.grid.major = element_blank(),
+          panel.grid.minor = element_blank(),
+          legend.position="right", plot.title = element_text(size = 10) )
   
-
-  print(paste0("Image Filename: featureAccuracy_", genre, "_", score.num,"_gbm"))
+  print(paste0("Image Filename: featureFscore_", genre))
   print(accuracyPlot)
 
 end.time <- Sys.time()

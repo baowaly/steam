@@ -19,7 +19,6 @@ pred <- prediction(predictions, y);
 
 # Recall-Precision curve             
 RP.perf <- performance(pred, "prec", "rec");
-
 plot (RP.perf);
 
 # ROC curve

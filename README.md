@@ -1,3 +1,1 @@
----
-title: Steam Review Helpfulness
----
+# Steam Review Helpfulness
